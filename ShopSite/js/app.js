@@ -116,7 +116,7 @@ function addToCart(product) {
 
     if (line) {
         // Подсказка: Количество не прибавляется здесь.
-        line.quantity + 1;
+        line.quantity += 1;
     } else {
         cart.push({
             productId: product.id,
@@ -132,7 +132,7 @@ function addToCart(product) {
 // Кнопка ✕ в корзине — убираем строку с этим товаром
 function removeFromCart(productId) {
     // Подсказка: Когда мы убираем продукт из корзины, как нам нужно фильтровать?
-    cart = cart.filter(l => l.productId === productId);
+    cart = cart.filter(l => l.productId !== productId);
     renderCart();
 }
 
@@ -159,6 +159,9 @@ function renderCart() {
 
     let total = 0;
     // Подсказка: Добавь сюда подсчёт цены для всех товаров
+    for (const line of cart) {
+        total += line.price * line.quantity;
+    }
     totalText.textContent = `Итого: ${total} ₽`;
 }
 
