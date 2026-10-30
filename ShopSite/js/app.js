@@ -56,16 +56,24 @@ async function loadProducts() {
 // Выбираем из всех товаров те, что подходят под фильтры, и показываем их
 function applyFilter() {
     let products = allProducts;
-
+ 
     // Фильтр 1: категория. Пустое значение — это «Все категории»
     const categoryId = categorySelect.value;
     if (categoryId !== '') {
         // Подсказка: p.categoryId это число, а categoryId это строка. Строка никогда не будет равна числу.
-        products = products.filter(p => p.categoryId === categoryId);
+        products = products.filter(p => p.categoryId === Number(categoryId));
     }
+    console.log(categoryId, allProducts[0].categoryId);
 
     // Фильтр 2: поиск по названию (задание 4)
     const searchText = searchInput.value;
+    if (searchText !== '') {
+        
+        products = products.filter(p => p.name.toLowerCase().includes(searchText.toLowerCase()));
+        
+        
+    }
+    
     // Добавь сюда свой фильтр
 
     renderProducts(products);
@@ -90,7 +98,7 @@ function renderProducts(products) {
         card.innerHTML = `
             <div class="card-id">№ ${product.id}</div>
             <h3>${product.name}</h3>
-            <div class="price">${product.Price} ₽</div>
+            <div class="price">${product.price} ₽</div>
             <div class="stock">На складе: ${product.stock} шт.</div>
             <button ${disabled}>В корзину</button>
         `;
