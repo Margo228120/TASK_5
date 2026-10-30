@@ -169,26 +169,45 @@ function renderCart() {
 
 // Кнопка «Оформить заказ» (задание 8)
 async function makeOrder() {
-}
-
-// ============ Запуск ============
-
-// Связываем элементы страницы с функциями: что вызывать, когда пользователь что-то сделал
-categorySelect.addEventListener('change', applyFilter);
-searchInput.addEventListener('input', applyFilter);
-orderButton.addEventListener('click', makeOrder);
-
-// Страница открылась — загружаем данные из API
-async function start() {
-    renderCart();
-    try {
-        await loadCategories();
-        await loadClients();
-        await loadProducts();
-    } catch (error) {
-        console.error(error);
-        showMessage('Не получилось связаться с API. Запусти ShopAPI (README, шаг 2) и обнови страницу');
+    if (clientSelect.value === '') {
+        showMessage('Выбери клиента')
+        return;
     }
-}
+    if (cart.length === 0) {
+        showMessage('Корзина пуста')
 
-start();
+        return;
+
+    }
+    const result = await createOrder(clientSelect.value, cart);
+    if (result.error) {
+        showMessage(result.error)
+        return;
+    }
+
+    showMessage(`Заказ № ${result.order.id} оформлен`);
+    cart = []
+    renderCart();
+    await loadProducts();
+}
+    // ============ Запуск ============
+
+    // Связываем элементы страницы с функциями: что вызывать, когда пользователь что-то сделал
+    categorySelect.addEventListener('change', applyFilter);
+    searchInput.addEventListener('input', applyFilter);
+    orderButton.addEventListener('click', makeOrder);
+
+    // Страница открылась — загружаем данные из API
+    async function start() {
+        renderCart();
+        try {
+            await loadCategories();
+            await loadClients();
+            await loadProducts();
+        } catch (error) {
+            console.error(error);
+            showMessage('Не получилось связаться с API. Запусти ShopAPI (README, шаг 2) и обнови страницу');
+        }
+    }
+
+    start();

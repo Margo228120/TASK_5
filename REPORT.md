@@ -58,3 +58,53 @@ for (const line of cart) {
 
 totalText.textContent = `Итого: ${total} ₽`;
 
+
+
+Задание 8
+
+
+
+async function makeOrder() {
+
+&#x20;   if (clientSelect.value === '') {
+
+&#x20;       showMessage('Выбери клиента')
+
+&#x20;       return;
+
+&#x20;   }
+
+&#x20;   if (cart.length === 0) {
+
+&#x20;       showMessage('Корзина пуста')
+
+
+
+&#x20;       return;
+
+
+
+&#x20;   }
+
+&#x20;   const result = await createOrder(clientSelect.value, cart);
+
+&#x20;   if (result.error) {
+
+&#x20;       showMessage(result.error)
+
+&#x20;       return;
+
+&#x20;   }
+
+
+
+&#x20;   showMessage(`Заказ № ${result.order.id} оформлен`);
+
+&#x20;   cart = \[]
+
+&#x20;   renderCart();
+
+&#x20;   await loadProducts();
+
+}
+
